@@ -5,6 +5,8 @@
 
 # Python and Notebook caches
 __pycache__/
+.claude/
+.pytest_cache
 *.py[cod]
 .ipynb_checkpoints/
 .venv/

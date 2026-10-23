@@ -2,6 +2,14 @@
 
 状态：设计稿，2026-10-22。以下组件与文件均为未来实现方案。
 
+> 2026-10-23 实施后说明：本机没有 SiliconFlow 凭据，Embedding 经用户确认改用百炼
+> `text-embedding-v4`（1024 维，复用 `BAILIAN_*`）；旧 `docs` 集合不可用。
+> 首版基线为 `rag_tutorial.docs_v1`（220/80，43 块）；2.1 章节切分/父块补全使用
+> `rag_tutorial.docs_v2`（38 子块、30 父块，索引清单 `data/index_manifest.json`）。
+> 实际配置与结果以 `config.py`、[docs/README](README.md)、
+> [步骤 9 验收记录](05-acceptance-results.md) 和
+> [父块补全对比](07-parent-expansion-comparison.md) 为准。
+
 ## 1. 两条运行链路
 
 ### 1.1 知识入库

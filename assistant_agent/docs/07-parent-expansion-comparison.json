@@ -1,0 +1,470 @@
+{
+  "collection": "docs_v2",
+  "strategy": "section-parent-v1",
+  "child_count": 38,
+  "parent_count": 30,
+  "top_k": 5,
+  "baseline": {
+    "strategy": "recursive-220-80",
+    "collection": "docs_v1",
+    "chunk_count": 43
+  },
+  "questions": [
+    {
+      "id": "Q03",
+      "question": "为什么我在 7 天内申请退款，还是被拒了？",
+      "facts": [
+        "7 个自然日",
+        "10%",
+        "50%",
+        "升级",
+        "红字发票"
+      ],
+      "covered": [
+        "7 个自然日",
+        "10%",
+        "50%",
+        "升级",
+        "红字发票"
+      ],
+      "missing": [],
+      "condition_hits": {
+        "未超过套餐月度额度的 10%": true,
+        "套餐升级": true,
+        "红字发票流程": true
+      },
+      "parent_ids": [
+        "knowledge.txt#p029",
+        "knowledge.txt#p019",
+        "knowledge.txt#p021",
+        "knowledge.txt#p020"
+      ],
+      "parent_titles": [
+        "九、典型客服问答口径 / 九、典型客服问答口径",
+        "六、退款规则 / 2. 基础版与专业版",
+        "六、退款规则 / 4. 退款到账时效",
+        "六、退款规则 / 3. 企业版"
+      ],
+      "matched_chunk_ids": [
+        [
+          36
+        ],
+        [
+          24,
+          23
+        ],
+        [
+          26
+        ],
+        [
+          25
+        ]
+      ],
+      "scores": [
+        0.700634,
+        0.699128,
+        0.581934,
+        0.581745
+      ],
+      "hit_context_lengths": [
+        429,
+        337,
+        72,
+        104
+      ],
+      "hit_count": 4,
+      "context_chars": 942,
+      "formatted_context_chars": 1315,
+      "baseline_context_chars": 746,
+      "baseline_hit_count": 5,
+      "context_growth": 1.263,
+      "hits": [
+        {
+          "parent_id": "knowledge.txt#p029",
+          "chapter": "九、典型客服问答口径",
+          "section": "九、典型客服问答口径",
+          "matched_chunk_ids": [
+            36
+          ],
+          "score": 0.700634,
+          "context_length": 429
+        },
+        {
+          "parent_id": "knowledge.txt#p019",
+          "chapter": "六、退款规则",
+          "section": "2. 基础版与专业版",
+          "matched_chunk_ids": [
+            24,
+            23
+          ],
+          "score": 0.699128,
+          "context_length": 337
+        },
+        {
+          "parent_id": "knowledge.txt#p021",
+          "chapter": "六、退款规则",
+          "section": "4. 退款到账时效",
+          "matched_chunk_ids": [
+            26
+          ],
+          "score": 0.581934,
+          "context_length": 72
+        },
+        {
+          "parent_id": "knowledge.txt#p020",
+          "chapter": "六、退款规则",
+          "section": "3. 企业版",
+          "matched_chunk_ids": [
+            25
+          ],
+          "score": 0.581745,
+          "context_length": 104
+        }
+      ],
+      "surrounding_context": {
+        "knowledge.txt#p029": "九、典型客服问答口径\n\n问：基础版支持多少个正式成员？\n答：基础版正式成员上限为 10 人，按已激活成员计算，未激活邀请成员暂不计入。\n\n问：外部协作者是否占用正式成员名额？\n答：不占用，但基础版最多 20 个，专业版最多 100 个，且只能访问被授权的指定知识库。\n\n问：试用版到期后数据会立刻删除吗？\n答：不会。试用版先冻结 7 天，再进入 23 天只读归档期，因此最长保留 30 天，超出后不可恢复删除。\n\n问：基础版 API 超额后会停用吗？\n答：不会。API 超额后继续服务，但会按阶梯计费；真正会停的是 AI 问答额度耗尽后的问答服务。\n\n问：为什么我申请退款被拒了？\n答：常见原因包括：超过首次购买 7 个自然日、AI 问答使用量超过月度额度的 50%、升级部分订单不适用首购退款规则，或者已经开具专票但尚未完成红字发票流程。\n\n问：企业版是否一定支持私有化部署？\n答：企业版可以选配私有化部署，但不是所有企业版合同默认包含，需要单独签约确认。",
+        "knowledge.txt#p019": "六、退款规则\n\n2. 基础版与专业版\n基础版和专业版按以下统一规则退款：\n- 首次购买后 7 个自然日内，可申请无理由退款\n- 若在退款申请时，AI 问答实际使用量未超过套餐月度额度的 10%，则可全额退款\n- 若在退款申请时，AI 问答实际使用量超过套餐月度额度的 10% 但未超过 50%，则退还 50%\n- 若在退款申请时，AI 问答实际使用量超过套餐月度额度的 50%，则不支持退款\n\n补充说明：\n这里的“7 个自然日内”从支付成功时间开始计算，到第 7 日的 23:59:59 截止。\n若用户发生过套餐升级，升级部分金额不适用“首次购买 7 日无理由退款”规则，只能对当前有效订单中满足条件的首购部分申请退款。\n若用户已开具专票，则需先完成红字发票流程后才能退款。",
+        "knowledge.txt#p021": "六、退款规则\n\n4. 退款到账时效\n原路退款通常在 3 到 7 个工作日内到账。\n若用户使用对公转账支付，退款可能需要 7 到 15 个工作日。",
+        "knowledge.txt#p020": "六、退款规则\n\n3. 企业版\n企业版默认不支持线上直接退款。\n若因重复付款、合同签署失败或服务未开通等特殊原因需要退款，需由销售、法务和财务联合审批。\n企业版已消耗的实施服务、人天服务和定制开发费用通常不退。"
+      },
+      "baseline_formatted_context_chars": 934,
+      "formatted_context_growth": 1.408
+    },
+    {
+      "id": "Q04",
+      "question": "基础版首购 7 天内，问答额度刚好用了 10%，能全退吗？",
+      "facts": [
+        "10%",
+        "全额退款"
+      ],
+      "covered": [
+        "10%",
+        "全额退款"
+      ],
+      "missing": [],
+      "condition_hits": {
+        "未超过套餐月度额度的 10%": true,
+        "全额退款": true
+      },
+      "parent_ids": [
+        "knowledge.txt#p019",
+        "knowledge.txt#p029",
+        "knowledge.txt#p018"
+      ],
+      "parent_titles": [
+        "六、退款规则 / 2. 基础版与专业版",
+        "九、典型客服问答口径 / 九、典型客服问答口径",
+        "六、退款规则 / 1. 试用版"
+      ],
+      "matched_chunk_ids": [
+        [
+          23,
+          24
+        ],
+        [
+          36,
+          35
+        ],
+        [
+          22
+        ]
+      ],
+      "scores": [
+        0.799308,
+        0.73614,
+        0.617734
+      ],
+      "hit_context_lengths": [
+        337,
+        429,
+        30
+      ],
+      "hit_count": 3,
+      "context_chars": 796,
+      "formatted_context_chars": 1076,
+      "baseline_context_chars": 754,
+      "baseline_hit_count": 5,
+      "context_growth": 1.056,
+      "hits": [
+        {
+          "parent_id": "knowledge.txt#p019",
+          "chapter": "六、退款规则",
+          "section": "2. 基础版与专业版",
+          "matched_chunk_ids": [
+            23,
+            24
+          ],
+          "score": 0.799308,
+          "context_length": 337
+        },
+        {
+          "parent_id": "knowledge.txt#p029",
+          "chapter": "九、典型客服问答口径",
+          "section": "九、典型客服问答口径",
+          "matched_chunk_ids": [
+            36,
+            35
+          ],
+          "score": 0.73614,
+          "context_length": 429
+        },
+        {
+          "parent_id": "knowledge.txt#p018",
+          "chapter": "六、退款规则",
+          "section": "1. 试用版",
+          "matched_chunk_ids": [
+            22
+          ],
+          "score": 0.617734,
+          "context_length": 30
+        }
+      ],
+      "surrounding_context": {
+        "knowledge.txt#p019": "六、退款规则\n\n2. 基础版与专业版\n基础版和专业版按以下统一规则退款：\n- 首次购买后 7 个自然日内，可申请无理由退款\n- 若在退款申请时，AI 问答实际使用量未超过套餐月度额度的 10%，则可全额退款\n- 若在退款申请时，AI 问答实际使用量超过套餐月度额度的 10% 但未超过 50%，则退还 50%\n- 若在退款申请时，AI 问答实际使用量超过套餐月度额度的 50%，则不支持退款\n\n补充说明：\n这里的“7 个自然日内”从支付成功时间开始计算，到第 7 日的 23:59:59 截止。\n若用户发生过套餐升级，升级部分金额不适用“首次购买 7 日无理由退款”规则，只能对当前有效订单中满足条件的首购部分申请退款。\n若用户已开具专票，则需先完成红字发票流程后才能退款。",
+        "knowledge.txt#p029": "九、典型客服问答口径\n\n问：基础版支持多少个正式成员？\n答：基础版正式成员上限为 10 人，按已激活成员计算，未激活邀请成员暂不计入。\n\n问：外部协作者是否占用正式成员名额？\n答：不占用，但基础版最多 20 个，专业版最多 100 个，且只能访问被授权的指定知识库。\n\n问：试用版到期后数据会立刻删除吗？\n答：不会。试用版先冻结 7 天，再进入 23 天只读归档期，因此最长保留 30 天，超出后不可恢复删除。\n\n问：基础版 API 超额后会停用吗？\n答：不会。API 超额后继续服务，但会按阶梯计费；真正会停的是 AI 问答额度耗尽后的问答服务。\n\n问：为什么我申请退款被拒了？\n答：常见原因包括：超过首次购买 7 个自然日、AI 问答使用量超过月度额度的 50%、升级部分订单不适用首购退款规则，或者已经开具专票但尚未完成红字发票流程。\n\n问：企业版是否一定支持私有化部署？\n答：企业版可以选配私有化部署，但不是所有企业版合同默认包含，需要单独签约确认。",
+        "knowledge.txt#p018": "六、退款规则\n\n1. 试用版\n试用版为免费版本，不涉及退款。"
+      },
+      "baseline_formatted_context_chars": 942,
+      "formatted_context_growth": 1.142
+    },
+    {
+      "id": "Q05",
+      "question": "用了刚好 50% 和超过 50%，退款有什么区别？",
+      "facts": [
+        "退还 50%",
+        "不支持退款"
+      ],
+      "covered": [
+        "退还 50%",
+        "不支持退款"
+      ],
+      "missing": [],
+      "condition_hits": {
+        "超过套餐月度额度的 10% 但未超过 50%": true,
+        "超过套餐月度额度的 50%": true
+      },
+      "parent_ids": [
+        "knowledge.txt#p019",
+        "knowledge.txt#p029",
+        "knowledge.txt#p020",
+        "knowledge.txt#p018"
+      ],
+      "parent_titles": [
+        "六、退款规则 / 2. 基础版与专业版",
+        "九、典型客服问答口径 / 九、典型客服问答口径",
+        "六、退款规则 / 3. 企业版",
+        "六、退款规则 / 1. 试用版"
+      ],
+      "matched_chunk_ids": [
+        [
+          23,
+          24
+        ],
+        [
+          36
+        ],
+        [
+          25
+        ],
+        [
+          22
+        ]
+      ],
+      "scores": [
+        0.662814,
+        0.656487,
+        0.597225,
+        0.593001
+      ],
+      "hit_context_lengths": [
+        337,
+        429,
+        104,
+        30
+      ],
+      "hit_count": 4,
+      "context_chars": 900,
+      "formatted_context_chars": 1270,
+      "baseline_context_chars": 918,
+      "baseline_hit_count": 5,
+      "context_growth": 0.98,
+      "hits": [
+        {
+          "parent_id": "knowledge.txt#p019",
+          "chapter": "六、退款规则",
+          "section": "2. 基础版与专业版",
+          "matched_chunk_ids": [
+            23,
+            24
+          ],
+          "score": 0.662814,
+          "context_length": 337
+        },
+        {
+          "parent_id": "knowledge.txt#p029",
+          "chapter": "九、典型客服问答口径",
+          "section": "九、典型客服问答口径",
+          "matched_chunk_ids": [
+            36
+          ],
+          "score": 0.656487,
+          "context_length": 429
+        },
+        {
+          "parent_id": "knowledge.txt#p020",
+          "chapter": "六、退款规则",
+          "section": "3. 企业版",
+          "matched_chunk_ids": [
+            25
+          ],
+          "score": 0.597225,
+          "context_length": 104
+        },
+        {
+          "parent_id": "knowledge.txt#p018",
+          "chapter": "六、退款规则",
+          "section": "1. 试用版",
+          "matched_chunk_ids": [
+            22
+          ],
+          "score": 0.593001,
+          "context_length": 30
+        }
+      ],
+      "surrounding_context": {
+        "knowledge.txt#p019": "六、退款规则\n\n2. 基础版与专业版\n基础版和专业版按以下统一规则退款：\n- 首次购买后 7 个自然日内，可申请无理由退款\n- 若在退款申请时，AI 问答实际使用量未超过套餐月度额度的 10%，则可全额退款\n- 若在退款申请时，AI 问答实际使用量超过套餐月度额度的 10% 但未超过 50%，则退还 50%\n- 若在退款申请时，AI 问答实际使用量超过套餐月度额度的 50%，则不支持退款\n\n补充说明：\n这里的“7 个自然日内”从支付成功时间开始计算，到第 7 日的 23:59:59 截止。\n若用户发生过套餐升级，升级部分金额不适用“首次购买 7 日无理由退款”规则，只能对当前有效订单中满足条件的首购部分申请退款。\n若用户已开具专票，则需先完成红字发票流程后才能退款。",
+        "knowledge.txt#p029": "九、典型客服问答口径\n\n问：基础版支持多少个正式成员？\n答：基础版正式成员上限为 10 人，按已激活成员计算，未激活邀请成员暂不计入。\n\n问：外部协作者是否占用正式成员名额？\n答：不占用，但基础版最多 20 个，专业版最多 100 个，且只能访问被授权的指定知识库。\n\n问：试用版到期后数据会立刻删除吗？\n答：不会。试用版先冻结 7 天，再进入 23 天只读归档期，因此最长保留 30 天，超出后不可恢复删除。\n\n问：基础版 API 超额后会停用吗？\n答：不会。API 超额后继续服务，但会按阶梯计费；真正会停的是 AI 问答额度耗尽后的问答服务。\n\n问：为什么我申请退款被拒了？\n答：常见原因包括：超过首次购买 7 个自然日、AI 问答使用量超过月度额度的 50%、升级部分订单不适用首购退款规则，或者已经开具专票但尚未完成红字发票流程。\n\n问：企业版是否一定支持私有化部署？\n答：企业版可以选配私有化部署，但不是所有企业版合同默认包含，需要单独签约确认。",
+        "knowledge.txt#p020": "六、退款规则\n\n3. 企业版\n企业版默认不支持线上直接退款。\n若因重复付款、合同签署失败或服务未开通等特殊原因需要退款，需由销售、法务和财务联合审批。\n企业版已消耗的实施服务、人天服务和定制开发费用通常不退。",
+        "knowledge.txt#p018": "六、退款规则\n\n1. 试用版\n试用版为免费版本，不涉及退款。"
+      },
+      "baseline_formatted_context_chars": 1106,
+      "formatted_context_growth": 1.148
+    },
+    {
+      "id": "Q06",
+      "question": "已开专票，能直接退款吗？",
+      "facts": [
+        "红字发票"
+      ],
+      "covered": [
+        "红字发票"
+      ],
+      "missing": [],
+      "condition_hits": {
+        "红字发票流程": true
+      },
+      "parent_ids": [
+        "knowledge.txt#p025",
+        "knowledge.txt#p020",
+        "knowledge.txt#p024",
+        "knowledge.txt#p019",
+        "knowledge.txt#p023"
+      ],
+      "parent_titles": [
+        "七、发票规则 / 4. 专票补充规则",
+        "六、退款规则 / 3. 企业版",
+        "七、发票规则 / 3. 发票金额",
+        "六、退款规则 / 2. 基础版与专业版",
+        "七、发票规则 / 2. 开票时间"
+      ],
+      "matched_chunk_ids": [
+        [
+          30
+        ],
+        [
+          25
+        ],
+        [
+          29
+        ],
+        [
+          24
+        ],
+        [
+          28
+        ]
+      ],
+      "scores": [
+        0.762238,
+        0.652949,
+        0.650833,
+        0.64122,
+        0.636212
+      ],
+      "hit_context_lengths": [
+        122,
+        104,
+        68,
+        337,
+        89
+      ],
+      "hit_count": 5,
+      "context_chars": 720,
+      "formatted_context_chars": 1177,
+      "baseline_context_chars": 868,
+      "baseline_hit_count": 5,
+      "context_growth": 0.829,
+      "hits": [
+        {
+          "parent_id": "knowledge.txt#p025",
+          "chapter": "七、发票规则",
+          "section": "4. 专票补充规则",
+          "matched_chunk_ids": [
+            30
+          ],
+          "score": 0.762238,
+          "context_length": 122
+        },
+        {
+          "parent_id": "knowledge.txt#p020",
+          "chapter": "六、退款规则",
+          "section": "3. 企业版",
+          "matched_chunk_ids": [
+            25
+          ],
+          "score": 0.652949,
+          "context_length": 104
+        },
+        {
+          "parent_id": "knowledge.txt#p024",
+          "chapter": "七、发票规则",
+          "section": "3. 发票金额",
+          "matched_chunk_ids": [
+            29
+          ],
+          "score": 0.650833,
+          "context_length": 68
+        },
+        {
+          "parent_id": "knowledge.txt#p019",
+          "chapter": "六、退款规则",
+          "section": "2. 基础版与专业版",
+          "matched_chunk_ids": [
+            24
+          ],
+          "score": 0.64122,
+          "context_length": 337
+        },
+        {
+          "parent_id": "knowledge.txt#p023",
+          "chapter": "七、发票规则",
+          "section": "2. 开票时间",
+          "matched_chunk_ids": [
+            28
+          ],
+          "score": 0.636212,
+          "context_length": 89
+        }
+      ],
+      "surrounding_context": {
+        "knowledge.txt#p025": "七、发票规则\n\n4. 专票补充规则\n若用户申请增值税专用发票，需提前维护完整开票信息。\n若开票后发生退款，必须先完成红字发票流程，再进入退款流程。\n这一点与基础版、专业版的退款规则直接相关：已经开具专票的订单，不会直接退款，必须先处理红字发票。",
+        "knowledge.txt#p020": "六、退款规则\n\n3. 企业版\n企业版默认不支持线上直接退款。\n若因重复付款、合同签署失败或服务未开通等特殊原因需要退款，需由销售、法务和财务联合审批。\n企业版已消耗的实施服务、人天服务和定制开发费用通常不退。",
+        "knowledge.txt#p024": "七、发票规则\n\n3. 发票金额\n发票金额默认按实际支付金额开具，不含已退还部分。\n使用优惠券抵扣的金额不开票，只对用户实际支付部分开票。",
+        "knowledge.txt#p019": "六、退款规则\n\n2. 基础版与专业版\n基础版和专业版按以下统一规则退款：\n- 首次购买后 7 个自然日内，可申请无理由退款\n- 若在退款申请时，AI 问答实际使用量未超过套餐月度额度的 10%，则可全额退款\n- 若在退款申请时，AI 问答实际使用量超过套餐月度额度的 10% 但未超过 50%，则退还 50%\n- 若在退款申请时，AI 问答实际使用量超过套餐月度额度的 50%，则不支持退款\n\n补充说明：\n这里的“7 个自然日内”从支付成功时间开始计算，到第 7 日的 23:59:59 截止。\n若用户发生过套餐升级，升级部分金额不适用“首次购买 7 日无理由退款”规则，只能对当前有效订单中满足条件的首购部分申请退款。\n若用户已开具专票，则需先完成红字发票流程后才能退款。",
+        "knowledge.txt#p023": "七、发票规则\n\n2. 开票时间\n按月订阅用户在支付成功后即可申请开票。\n若同一自然月内发生退款，则对应退款部分不能重复开票。\n企业年付客户一般在款项到账并完成合同归档后统一开票。"
+      },
+      "baseline_formatted_context_chars": 1056,
+      "formatted_context_growth": 1.115
+    }
+  ]
+}

@@ -29,10 +29,17 @@ load_dotenv(dotenv_path=ENV_FILE, override=False)
 
 MILVUS_URI = "http://localhost:19530"  # Milvus 服务的连接地址
 DB_NAME = "rag_tutorial"  # 自定义数据库名称
-COLLECTION_NAME = "docs"  # 向量集合名称（类似于传统数据库的表）
+# 旧 docs 集合含 2 条早期实验记录且缺少 bloom filter 统计对象、无法加载；
+# 经用户确认保留旧集合不动。docs_v1 是 220/80 基线，docs_v2 用于章节切分/父块补全。
+COLLECTION_NAME = "docs_v2"  # 向量集合名称（类似于传统数据库的表）
 # KNOWLEDGE_FILE 已在上方按项目位置解析为绝对路径
-EMBED_MODEL_NAME = "Pro/BAAI/bge-m3"  # 课件候选；服务商可用名称需现场确认
-EMBED_DIM = 1024  # BGE-M3 模型输出的向量维度固定为 1024
+# 课件候选为 Pro/BAAI/bge-m3（SiliconFlow）。本地没有 SiliconFlow 凭据，
+# 经用户确认改用百炼 OpenAI 兼容接口的 text-embedding-v4，复用 BAILIAN_*。
+EMBED_MODEL_NAME = "text-embedding-v4"
+EMBED_DIM = 1024  # 与 text-embedding-v4 的 dimensions 参数、Milvus schema 三者一致
+EMBED_PROVIDER = "openai"  # init_embeddings 的 provider（OpenAI 兼容协议）
+EMBED_SEND_DIMENSIONS = True  # text-embedding-v4 支持 dimensions；若换模型需核验
+EMBED_BATCH_SIZE = int(os.getenv("EMBED_BATCH_SIZE", "10"))  # 百炼单次请求批量上限
 
 # =========================
 # 3. 切分与检索
@@ -41,6 +48,11 @@ EMBED_DIM = 1024  # BGE-M3 模型输出的向量维度固定为 1024
 CHUNK_SIZE = 220
 CHUNK_OVERLAP = 80
 TOP_K = 5
+
+# 2.1 章节切分与父块补全
+CHUNKING_STRATEGY = "section-parent-v1"
+MIN_CHILD_CHARS = 5  # 去掉章节/小节标题后仍有少量有效文字即可入库
+INDEX_MANIFEST_FILE = (PROJECT_DIR / "data" / "index_manifest.json").resolve()
 
 # =========================
 # 4. 对话模型
@@ -55,8 +67,9 @@ LLM_API_KEY = os.getenv(LLM_API_KEY_ENV)
 LLM_BASE_URL = os.getenv(LLM_BASE_URL_ENV)
 
 # Embedding 与对话模型分开配置，不假设两者共用同一服务商或地址。
-EMBED_API_KEY_ENV = "SILICONFLOW_API_KEY"
-EMBED_BASE_URL_ENV = "SILICONFLOW_BASE_URL"
+# 本机实际可用的 Embedding 凭据是百炼；变量名与对话模型相同，但模型配置分开维护。
+EMBED_API_KEY_ENV = "BAILIAN_API_KEY"
+EMBED_BASE_URL_ENV = "BAILIAN_API_URL"
 EMBED_API_KEY = os.getenv(EMBED_API_KEY_ENV)
 EMBED_BASE_URL = os.getenv(EMBED_BASE_URL_ENV)
 
