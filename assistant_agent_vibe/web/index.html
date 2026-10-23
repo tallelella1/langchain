@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atguigu 助手</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --panel: #ffffff;
+      --ink: #1f2328;
+      --muted: #6b7280;
+      --line: #d8d8d2;
+      --accent: #1f6f5c;
+      --error: #b3261e;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    main { max-width: 920px; margin: 0 auto; padding: 28px 18px 60px; }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    .sub { color: var(--muted); margin: 0 0 20px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; }
+    textarea {
+      width: 100%;
+      min-height: 92px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font: inherit;
+      color: inherit;
+      background: #fff;
+    }
+    .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+    .row label { margin: 0; display: flex; gap: 5px; align-items: center; }
+    select, button {
+      font: inherit;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 7px 10px;
+      background: #fff;
+      color: inherit;
+    }
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      cursor: pointer;
+      padding: 8px 16px;
+    }
+    button.primary:disabled { opacity: .55; cursor: default; }
+    button.ghost { cursor: pointer; background: transparent; }
+    .answer { white-space: pre-wrap; }
+    .sources { margin-top: 10px; display: grid; gap: 8px; }
+    .source {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #fcfcfa;
+    }
+    .source .meta { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+    .source .text { white-space: pre-wrap; font-size: 13px; }
+    .error { color: var(--error); white-space: pre-wrap; }
+    .status { color: var(--muted); font-size: 12px; min-height: 18px; }
+    .hidden { display: none; }
+    .session { color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Atguigu 助手</h1>
+  <p class="sub">客服知识库问答：答案只依据检索片段，来源编号可追溯。</p>
+
+  <section class="panel">
+    <label for="question">问题</label>
+    <textarea id="question" placeholder="例如：为什么我在 7 天内申请退款，还是被拒了？"></textarea>
+    <div class="row">
+      <label>模式
+        <select id="mode">
+          <option value="fixed">固定检索</option>
+          <option value="tool">Agent 自主检索</option>
+        </select>
+      </label>
+      <label>检索
+        <select id="strategy">
+          <option value="vector">向量</option>
+          <option value="hybrid">混合（BM25+向量）</option>
+        </select>
+      </label>
+      <label><input id="stream" type="checkbox"> 流式输出</label>
+      <button id="ask" class="primary">提问</button>
+      <button id="reset" class="ghost" type="button">新会话</button>
+      <span class="session">会话：<code id="session">-</code></span>
+    </div>
+    <div id="status" class="status" aria-live="polite"></div>
+  </section>
+
+  <section id="error-box" class="panel error hidden" role="alert"></section>
+
+  <section id="answer-box" class="panel hidden">
+    <label>回答</label>
+    <div id="answer" class="answer"></div>
+  </section>
+
+  <section id="sources-box" class="panel hidden">
+    <label>本次依据</label>
+    <div id="sources" class="sources"></div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const state = { sessionId: null, busy: false };
+
+  function setStatus(text) { $("status").textContent = text || ""; }
+  function showError(text) {
+    const box = $("error-box");
+    box.textContent = text;
+    box.classList.toggle("hidden", !text);
+  }
+  function setSession(id) {
+    state.sessionId = id;
+    $("session").textContent = id || "-";
+  }
+  function resetOutput() {
+    $("answer-box").classList.add("hidden");
+    $("sources-box").classList.add("hidden");
+    $("answer").textContent = "";
+    $("sources").replaceChildren();
+    showError("");
+  }
+  function payload() {
+    const question = $("question").value.trim();
+    if (!question) throw new Error("请输入问题");
+    return {
+      question,
+      session_id: state.sessionId || undefined,
+      mode: $("mode").value,
+      strategy: $("strategy").value,
+      k: 5,
+    };
+  }
+  function renderSources(sources) {
+    const root = $("sources");
+    root.replaceChildren();
+    if (!sources || !sources.length) {
+      const empty = document.createElement("div");
+      empty.className = "source";
+      empty.textContent = "本次未使用知识片段。";
+      root.appendChild(empty);
+    } else {
+      for (const item of sources) {
+        const card = document.createElement("article");
+        card.className = "source";
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        const place = [item.chapter, item.section, item.location].filter(Boolean).join(" / ");
+        meta.textContent = `[片段 ${item.citation}] ${item.source || ""}${place ? "；" + place : ""}`;
+        const text = document.createElement("div");
+        text.className = "text";
+        text.textContent = item.text || "";
+        card.append(meta, text);
+        root.appendChild(card);
+      }
+    }
+    $("sources-box").classList.toggle("hidden", false);
+  }
+  function renderDone(data) {
+    $("answer").textContent = data.answer || "";
+    $("answer-box").classList.remove("hidden");
+    renderSources(data.sources || []);
+    if (data.session_id) setSession(data.session_id);
+    const calls = data.tool_calls ? `；工具调用 ${data.tool_calls} 次` : "";
+    setStatus(`完成；模型调用 ${data.model_calls ?? 0} 次${calls}`);
+    if (data.invalid_citations && data.invalid_citations.length) {
+      showError(`回答引用了不存在的片段编号：${data.invalid_citations.join(", ")}，请人工核对。`);
+    }
+  }
+
+  async function askOnce() {
+    const body = payload();
+    resetOutput();
+    setStatus("检索并生成中…");
+    const response = await fetch("/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.detail || `请求失败：HTTP ${response.status}`);
+    renderDone(data);
+  }
+
+  function parseSSEBlock(block) {
+    let name = "message";
+    const dataLines = [];
+    for (const line of block.split("\n")) {
+      if (line.startsWith("event:")) name = line.slice(6).trim();
+      else if (line.startsWith("data:")) dataLines.push(line.slice(5).trimStart());
+    }
+    if (!dataLines.length) return null;
+    return { name, data: JSON.parse(dataLines.join("\n")) };
+  }
+
+  async function askStream() {
+    const body = payload();
+    resetOutput();
+    setStatus("流式生成中…");
+    const response = await fetch("/ask/stream", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok || !response.body) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.detail || `请求失败：HTTP ${response.status}`);
+    }
+    $("answer-box").classList.remove("hidden");
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      let cut;
+      while ((cut = buffer.indexOf("\n\n")) >= 0) {
+        const block = buffer.slice(0, cut);
+        buffer = buffer.slice(cut + 2);
+        const event = parseSSEBlock(block);
+        if (!event) continue;
+        if (event.name === "start") {
+          if (event.data.resolved_query) setStatus(`检索问题：${event.data.resolved_query}`);
+        } else if (event.name === "delta") {
+          $("answer").textContent += event.data.text || "";
+        } else if (event.name === "sources") {
+          renderSources(event.data.sources || []);
+        } else if (event.name === "done") {
+          renderDone(event.data);
+        } else if (event.name === "error") {
+          showError(event.data.message || "流式回答失败");
+          setStatus("失败");
+        }
+      }
+    }
+  }
+
+  async function run() {
+    if (state.busy) return;
+    state.busy = true;
+    $("ask").disabled = true;
+    try {
+      if ($("stream").checked) await askStream();
+      else await askOnce();
+    } catch (error) {
+      showError(error.message || String(error));
+      setStatus("失败");
+    } finally {
+      state.busy = false;
+      $("ask").disabled = false;
+    }
+  }
+
+  $("ask").addEventListener("click", run);
+  $("reset").addEventListener("click", () => {
+    setSession(null);
+    resetOutput();
+    setStatus("");
+  });
+  $("question").addEventListener("keydown", (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") run();
+  });
+})();
+</script>
+</body>
+</html>

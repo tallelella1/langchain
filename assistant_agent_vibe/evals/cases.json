@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "source": "docs/02-implementation-steps.md 的 Q01–Q12",
+  "notes": "事实覆盖仍是子串启发式检查，不等于答案正确；Q11/Q12 检查拒答行为。新增问题应进入下一版评估集，不围绕已见题调参。",
+  "cases": [
+    {
+      "id": "Q01",
+      "question": "基础版最多多少个正式成员？",
+      "expected_facts": ["10 人", "已激活成员"],
+      "support_sections": [
+        "四、成员与权限规则 / 1. 成员数计算口径",
+        "二、套餐说明 / 2. 基础版"
+      ],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q02",
+      "question": "外部协作者占正式名额吗？",
+      "expected_facts": ["不占用", "20 个", "100 个"],
+      "support_sections": ["四、成员与权限规则 / 3. 外部协作者"],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q03",
+      "question": "为什么我在 7 天内申请退款，还是被拒了？",
+      "expected_facts": ["7 个自然日", "10%", "50%", "升级", "红字发票"],
+      "support_sections": [
+        "六、退款规则 / 2. 基础版与专业版",
+        "七、发票规则 / 4. 专票补充规则"
+      ],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q04",
+      "question": "基础版首购 7 天内，问答额度刚好用了 10%，能全退吗？",
+      "expected_facts": ["10%", "全额退款"],
+      "support_sections": ["六、退款规则 / 2. 基础版与专业版"],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q05",
+      "question": "用了刚好 50% 和超过 50%，退款有什么区别？",
+      "expected_facts": ["退还 50%", "不支持退款"],
+      "support_sections": ["六、退款规则 / 2. 基础版与专业版"],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q06",
+      "question": "已开专票，能直接退款吗？",
+      "expected_facts": ["红字发票"],
+      "support_sections": ["七、发票规则 / 4. 专票补充规则"],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q07",
+      "question": "试用版到期会马上删除吗？",
+      "expected_facts": ["冻结 7 天", "23 天", "30 天"],
+      "support_sections": [
+        "五、数据保留与删除规则 / 1. 工作区到期后的数据保留"
+      ],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q08",
+      "question": "API 超额后是否立刻停用？",
+      "expected_facts": ["不会立刻停用", "AI 问答额度"],
+      "support_sections": ["三、额度与超额计费规则 / 4. 超额停用规则"],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q09",
+      "question": "企业版一定包含私有化部署吗？",
+      "expected_facts": ["私有化部署", "单独签约"],
+      "support_sections": ["八、企业版专属支持规则 / 2. 私有化部署"],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q10",
+      "question": "企业版合同约定和通用知识库不一样，按哪个？",
+      "expected_facts": ["以合同为准"],
+      "support_sections": ["文档说明 / 文档说明"],
+      "answerable": true,
+      "behavior": "answer"
+    },
+    {
+      "id": "Q11",
+      "question": "这个产品支持火星基地专线部署吗？",
+      "expected_facts": [],
+      "support_sections": [],
+      "answerable": false,
+      "behavior": "insufficient",
+      "behavior_hint": "回答应明确材料不足/无法确认，不得声称支持或默认包含。"
+    },
+    {
+      "id": "Q12",
+      "question": "我的订单现在能退多少钱？",
+      "expected_facts": [],
+      "support_sections": [],
+      "answerable": false,
+      "behavior": "missing_order_info",
+      "behavior_hint": "应指出缺少套餐、支付时间、使用量、升级、开票等信息，不得假定订单状态或编造金额。"
+    }
+  ]
+}

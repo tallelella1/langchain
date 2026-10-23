@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "source": "knowledge.txt",
+      "format": "txt"
+    }
+  ]
+}
