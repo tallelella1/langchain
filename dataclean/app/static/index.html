@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DataClean · 数据处理工作台</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+  <header><a class="brand" href="/">◈ <span>DataClean</span></a><span class="subtitle">销售数据处理与报表平台</span><div class="account" id="account" hidden><span id="username"></span><button id="logout" class="text-button">退出登录</button></div></header>
+  <main>
+    <div class="intro"><span class="eyebrow">DATA WORKSPACE / 数据工作台</span><h1>从原始数据，到清晰结果。</h1><p>上传销售 CSV，自动校验、去重和汇总。每一次处理都有记录。</p></div>
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+    <section class="panel auth-panel" id="auth"><div><span class="step">01 / 开始使用</span><h2>登录你的工作台</h2><p>新用户可以直接注册。文件与处理结果仅自己可见。</p></div><form id="auth-form"><label for="login-name">用户名</label><input id="login-name" name="username" autocomplete="username" minlength="3" maxlength="50" pattern="[A-Za-z0-9_]+" placeholder="字母、数字或下划线" required><label for="password">密码</label><input id="password" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" placeholder="至少 8 位" required><div class="actions"><button type="submit" id="login">登录</button><button type="button" id="register" class="secondary">注册并登录</button></div></form></section>
+    <div id="workspace" hidden>
+      <section class="panel upload-panel"><div><span class="step">01 / 提交数据</span><h2>让数据准备就绪</h2><p>支持 UTF-8 编码 CSV，默认最大 10 MB。</p><a href="/sample.csv" download>下载示例 CSV ↗</a></div><form id="upload-form"><label class="file-zone" for="csv-file"><span class="file-icon">↑</span><strong>选择销售数据 CSV</strong><span id="file-name">点击选择文件</span><input id="csv-file" type="file" accept=".csv" required></label><button id="upload" type="submit">上传并开始处理 <span aria-hidden="true">→</span></button></form><div class="schema"><strong>必需字段</strong><code>order_id</code><code>order_date</code><code>product</code><code>quantity</code><code>unit_price</code></div></section>
+      <section class="panel history-panel"><div class="section-heading"><div><span class="step">02 / 跟踪进度</span><h2>处理记录 <span id="count" class="count">0</span></h2></div><div class="controls"><label for="status-filter" class="sr-only">按任务状态筛选</label><select id="status-filter"><option value="">全部状态</option><option value="queued">排队中</option><option value="running">执行中</option><option value="succeeded">已完成</option><option value="failed">处理失败</option></select><button id="refresh" class="secondary">刷新</button></div></div><p class="muted">进行中的任务每 2 秒更新。重复上传相同文件会返回已有任务。</p><div class="table-scroll"><table><thead><tr><th>文件 / 任务</th><th>处理状态</th><th>清洗结果</th><th>创建时间</th><th>下载与操作</th></tr></thead><tbody id="jobs"></tbody></table></div><p id="empty" class="empty">还没有处理记录，上传一份 CSV 开始。</p><nav class="pagination" aria-label="任务分页"><span id="page-info"></span><div><button id="prev" class="secondary">上一页</button><button id="next" class="secondary">下一页</button></div></nav></section>
+    </div>
+    <footer><span>DataClean / 销售数据处理</span><a href="/docs" target="_blank" rel="noopener">API 文档 ↗</a></footer>
+  </main>
+</body>
+</html>

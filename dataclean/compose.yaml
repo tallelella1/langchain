@@ -1,0 +1,100 @@
+name: dataclean
+
+x-app: &app
+  build:
+    context: .
+    target: runtime
+  environment: &environment
+    DATACLEAN_DATABASE_URL: postgresql+psycopg://dataclean:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@postgres:5432/dataclean
+    DATACLEAN_JWT_SECRET: ${DATACLEAN_JWT_SECRET:?Set DATACLEAN_JWT_SECRET in .env}
+    DATACLEAN_TASK_BACKEND: celery
+    DATACLEAN_BROKER_URL: redis://redis:6379/0
+    DATACLEAN_STORAGE_DIR: /app/data/files
+  volumes:
+    - files:/app/data/files
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: dataclean
+      POSTGRES_DB: dataclean
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dataclean -d dataclean"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes", "--appendfsync", "everysec"]
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrate:
+    <<: *app
+    command: ["python", "-m", "app.manage", "init-db"]
+    depends_on:
+      postgres: {condition: service_healthy}
+
+  api:
+    <<: *app
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  worker:
+    <<: *app
+    command: ["celery", "-A", "app.celery_app:celery_app", "worker", "--loglevel=INFO", "--concurrency=2"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+
+  dispatcher:
+    <<: *app
+    command: ["python", "-m", "app.dispatcher"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+
+  test-postgres:
+    profiles: [test]
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: dataclean_test
+    tmpfs: [/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d dataclean_test"]
+      interval: 2s
+      timeout: 3s
+      retries: 10
+
+  tests:
+    profiles: [test]
+    build:
+      context: .
+      target: test
+    environment:
+      DATACLEAN_TEST_DATABASE_URL: postgresql+psycopg://test:test@test-postgres:5432/dataclean_test
+    depends_on:
+      test-postgres: {condition: service_healthy}
+
+volumes:
+  postgres:
+  redis:
+  files:

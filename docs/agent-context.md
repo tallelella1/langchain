@@ -15,3 +15,16 @@
 - 2026-10-16 创建私有仓库：https://github.com/tallelella1/langchain。
 - 本地远端 `origin` 指向该仓库，使用 `main` 分支。
 - `.env` 仅保留在本地；`.gitignore` 排除凭据、Python 缓存及 Notebook 检查点。
+
+## DataClean 异步数据处理平台（2026-10-27）
+
+- 新项目位于 `D:/grow/langchain/dataclean`，入口与完整运行说明见 `dataclean/README.md`。本任务用户选择不启用 superpower 流程。
+- 已实现注册/登录、JWT 与 Argon2id、销售 CSV 校验清洗、金额统计、权限隔离、任务状态、分页历史、失败重试和四种结果下载，附网页工作台。
+- 两种运行方式：Windows 本地 SQLite + 数据库队列线程；Docker Compose 使用 PostgreSQL + Redis + Linux Celery + 独立 dispatcher，自动执行 Alembic 迁移。
+- 幂等键由数据库唯一约束保证；任务使用原子抢占、可续租租约与执行令牌防止旧结果覆盖；输出目录全部生成后再发布。
+- 验证：SQLite 和独立 PostgreSQL 测试库各 26 项通过；两种模式真实 HTTP 全流程通过；Redis 中断恢复与 API 重启后的记录/报表持久化通过；浏览器注册、上传、自动刷新与下载通过。
+- PostgreSQL 测试有一条 Starlette 关于未来迁移 httpx2 的弃用提示，不影响本次通过结果。测试库独立，不操作业务库。
+- 当前 Docker 栈保留运行，工作台 `http://127.0.0.1:8000/`。停止命令在 dataclean 目录执行 `docker compose down`，保留数据卷。
+- 项目 `.venv` 已创建，新增依赖装在其内（现有虚拟环境复用父 Conda 环境的已装包）；根 requirements.txt 未修改。`.env` 包含随机本地密钥，已忽略，不记录其值。
+- 完整说明包含 CSV 字段、异常/去重规则、API、测试与面试要点。面向单机演示，尚未实现用户配额、自动文件清理和完整公网运维措施，不调用模型 API。
+
